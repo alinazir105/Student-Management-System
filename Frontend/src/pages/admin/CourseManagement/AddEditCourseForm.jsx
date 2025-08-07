@@ -12,6 +12,7 @@ export default function AddEditCourseForm() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const { id } = useParams();
+    const courseId = Number(id)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,15 +49,23 @@ export default function AddEditCourseForm() {
                 await api.put(`/api/admin/courses/${id}`, courseFormData, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
+                setCoursesData(prev => prev.map(course => 
+                    course.id === courseId ? { ...course, ...courseFormData }: course)
+                )
                 setSuccess("Course updated successfully");
+                setCourseFormData({title:"", description:""})
+                setTimeout(() => navigate("/admin/courses"), 1500);
             } else {
-                await api.post("/api/admin/courses", courseFormData, {
+                const res = await api.post("/api/admin/courses", courseFormData, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
+                const data = res.data
+                setCoursesData(prev => [...prev, data.course])
                 setSuccess("Course added successfully");
+                setCourseFormData({title:"", description:""})
+
             }
 
-            setTimeout(() => navigate(-1), 1500);
         } catch (error) {
             setError(error.response?.data?.message || "Operation failed");
         }

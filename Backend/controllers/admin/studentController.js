@@ -80,12 +80,19 @@ export const updateStudent = async(req, res)=>{
             return res.status(400).json({error})
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10)
+        // const hashedPassword = await bcrypt.hash(password, 10)
         //update student
-        const result = await pool.query(
-            "UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4 AND role = 'student' RETURNING *",
-            [name, email, hashedPassword, id]
-        )
+        let query, values;
+
+        if (password && password.trim() !== "") {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            query = "UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4 AND role = 'student' RETURNING *";
+            values = [name, email, hashedPassword, id];
+        } else {
+            query = "UPDATE users SET name = $1, email = $2 WHERE id = $3 AND role = 'student' RETURNING *";
+            values = [name, email, id];
+        }
+        const result = await pool.query(query, values)
 
         if(result.rowCount === 0){
             return res.status(404).json({error: "Student not found"})

@@ -13,6 +13,18 @@ export default function Login() {
   const location = useLocation();
   const { login } = useContext(AuthContext);
   const redirectPath = location?.state?.from?.pathname;
+  const loginMessage = location?.state?.message
+
+
+  useEffect(()=>{
+    if(loginMessage){
+      const timer = setTimeout(()=>{
+        navigate("/login", {replace: true, state: {}})
+      }, 100)
+
+      return ()=>clearTimeout(timer)
+    }
+  }, [loginMessage, navigate])
 
   useEffect(() => {
     const token = localStorage.getItem("token");

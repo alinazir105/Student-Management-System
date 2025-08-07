@@ -9,7 +9,7 @@ export const validateStudent = async (name, email, password, id) =>{
         return {isValid : false, error : "Email is required and must be a string"}
     }
 
-    if(!password || password.trim() === "" || typeof password !== 'string'){
+    if(!id && (!password || password.trim() === "" || typeof password !== 'string')){
         return {isValid : false, error : "Password is required and must be a string"}
     }
     

@@ -5,7 +5,7 @@ import { useState } from "react"
 export default function CourseManagement() {
   const [coursesData, setCoursesData] = useState([]);
     return (
-        <section className="h-screen mb-24">
+        <section className="min-h-screen mb-24">
             <CourseTable coursesData={coursesData} setCoursesData={setCoursesData} />
             <Outlet context={[coursesData, setCoursesData]} />
         </section>

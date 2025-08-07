@@ -1,12 +1,14 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import {jwtDecode} from 'jwt-decode'
-import { useContext, useEffect } from "react"
+import { useContext} from "react"
 import { AuthContext } from "./Layout"
 
 export default function AuthRequired() {
   const { user } = useContext(AuthContext);
   const location = useLocation();
 
+  if(user===undefined){
+    return <div>Loading...</div>
+  }
   if (!user) {
     return (
       <Navigate

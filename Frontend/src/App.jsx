@@ -33,6 +33,7 @@ function App() {
                 <Route path=':id' element={<AddEditCourseForm />} />
               </Route> 
               <Route path='students' element={<StudentManagement />}>
+                <Route index element={<AddEditStudentForm />} />
                 <Route path=':id' element={<AddEditStudentForm />} />      
               </Route>
             </Route>

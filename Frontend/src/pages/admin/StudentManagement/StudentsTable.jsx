@@ -3,19 +3,29 @@ import { useState, useEffect } from "react";
 import api from "../../../../axiosInstance";
 import { useNavigate } from "react-router-dom";
 
-export default function StudentsTable() {
-  const [studentsData, setStudentsData] = useState([]);
+export default function StudentsTable(props) {
+  const {studentsData, setStudentsData} = props;
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
+  function sanitizeStudents(students){
+    const sanitizedStudents = students.map(student => {
+      const {password, ...rest} = student
+
+      return rest
+    })
+    return sanitizedStudents
+  }
   async function fetchStudents() {
     const token = localStorage.getItem("token");
     try {
       const res = await api.get("/api/admin/students", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setStudentsData(res.data);
+      const data = res.data
+      const sanitizedData = sanitizeStudents(data)
+      setStudentsData(sanitizedData);
     } catch (error) {
       setError(error.response?.data?.message || "Failed to fetch courses");
     }
@@ -41,7 +51,7 @@ export default function StudentsTable() {
   }
 
   function handleEdit(id) {
-    navigate(`students/${id}`);
+    navigate(`/admin/students/${id}`);
   }
 
   function generateTableRows() {

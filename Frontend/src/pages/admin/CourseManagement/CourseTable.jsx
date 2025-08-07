@@ -15,6 +15,7 @@ export default function CourseTable(props) {
       const res = await api.get("/api/admin/courses", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(res.data)
       setCoursesData(res.data);
     } catch (error) {
       setError(error.response?.data?.message || "Failed to fetch courses");
@@ -23,7 +24,7 @@ export default function CourseTable(props) {
 
   useEffect(() => {
     fetchCourses();
-  }, [coursesData]);
+  }, []);
 
   async function handleDelete(id) {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
