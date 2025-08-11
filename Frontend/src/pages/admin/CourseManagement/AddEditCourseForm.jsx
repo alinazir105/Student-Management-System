@@ -42,13 +42,10 @@ export default function AddEditCourseForm() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const token = localStorage.getItem("token");
-
+        
         try {
             if (id) {
-                await api.put(`/api/admin/courses/${id}`, courseFormData, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                await api.put(`/api/admin/courses/${id}`, courseFormData);
                 setCoursesData(prev => prev.map(course => 
                     course.id === courseId ? { ...course, ...courseFormData }: course)
                 )
@@ -56,9 +53,7 @@ export default function AddEditCourseForm() {
                 setCourseFormData({title:"", description:""})
                 setTimeout(() => navigate("/admin/courses"), 1500);
             } else {
-                const res = await api.post("/api/admin/courses", courseFormData, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                const res = await api.post("/api/admin/courses", courseFormData);
                 const data = res.data
                 setCoursesData(prev => [...prev, data.course])
                 setSuccess("Course added successfully");

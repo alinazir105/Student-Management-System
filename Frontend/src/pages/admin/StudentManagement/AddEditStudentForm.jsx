@@ -50,9 +50,7 @@ export default function AddEditStudentForm() {
 
     try {
       if (id) {
-        await api.put(`/api/admin/students/${id}`, studentFormData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await api.put(`/api/admin/students/${id}`, studentFormData);
         setStudentsData(prev => prev.map(student => 
           student.id === studentId ? {...student, ...studentFormData} : student)
         )
@@ -60,9 +58,7 @@ export default function AddEditStudentForm() {
         setStudentFormData({name:"", email: "", password: ""})
         setTimeout(() => navigate("/admin/students"), 1500);
       } else {
-        const res = await api.post("/api/admin/students", studentFormData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.post("/api/admin/students", studentFormData);
         const data = res.data.newStudent
         setStudentsData(prev => [...prev, data])
         setSuccess("Student added successfully");

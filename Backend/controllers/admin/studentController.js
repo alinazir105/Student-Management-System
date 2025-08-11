@@ -17,6 +17,19 @@ export const getStudents = async(req, res) =>{
     }
 }
 
+export const getStudentCount = async (req, res)=>{
+    try{
+        const result = await pool.query("SELECT COUNT(*) FROM users WHERE role = 'student'")
+        
+        return res.status(200).json({count: parseInt(result.rows[0].count)})
+    }
+    catch(err){
+        console.error(err)
+        return res.status(500).json({error: "Internal Server Error"})
+    }
+}
+
+
 export const getStudentById = async(req, res) =>{
     try{
         const id = parseInt(req.params.id)
@@ -124,3 +137,4 @@ export const deleteStudent = async(req, res) => {
         return res.status(500).json({error: "Internal Server Error"})
     }
 }
+

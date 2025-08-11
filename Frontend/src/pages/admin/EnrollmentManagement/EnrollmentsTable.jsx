@@ -3,65 +3,59 @@ import { useState, useEffect } from "react";
 import api from "../../../../axiosInstance";
 import { useNavigate } from "react-router-dom";
 
-export default function StudentsTable(props) {
-  const {studentsData, setStudentsData} = props;
+export default function EnrollmentsTable(props) {
+  const {enrollmentsData, setEnrollmentsData} = props;
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  function sanitizeStudents(students){
-    const sanitizedStudents = students.map(student => {
-      const {password, ...rest} = student
-
-      return rest
-    })
-    return sanitizedStudents
-  }
-  async function fetchStudents() {
-    const token = localStorage.getItem("token");
+  async function fetchEnrollments() {
     try {
-      const res = await api.get("/api/admin/students", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = res.data
-      const sanitizedData = sanitizeStudents(data)
-      setStudentsData(sanitizedData);
+      const res = await api.get("/api/admin/enrollments");
+      console.log(res.data.data)
+      setEnrollmentsData(res.data.data);
     } catch (error) {
       setError(error.response?.data?.message || "Failed to fetch courses");
     }
   }
 
   useEffect(() => {
-    fetchStudents();
+    fetchEnrollments();
   }, []);
 
   async function handleDelete(id) {
-    if (!window.confirm("Are you sure you want to delete this student?")) return;
+    if (!window.confirm("Are you sure you want to delete this course?")) return;
 
+    const token = localStorage.getItem("token");
     try {
-      await api.delete(`/api/admin/students/${id}`);
-      setSuccess("Course deleted successfully");
-      setStudentsData((prev) => prev.filter((course) => course.id !== id));
+      await api.delete(`/api/admin/enrollments/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSuccess("Enrollment deleted successfully");
+      setEnrollmentsData((prev) => prev.filter((enrollment) => enrollment.id !== id));
     } catch (error) {
       setError(error.response?.data?.message || "Failed to delete course");
     }
   }
 
   function handleEdit(id) {
-    navigate(`/admin/students/${id}`);
+    navigate(`/admin/enrollments/${id}`);
   }
 
   function generateTableRows() {
-    return studentsData.map((student) => (
-      <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
-        <td className="px-6 py-3 text-sm font-medium text-gray-900">{student.id}</td>
-        <td className="px-6 py-3 text-sm text-gray-900">{student.name}</td>
-        <td className="px-6 py-3 text-sm text-gray-500">{student.email}</td>
+    return enrollmentsData.map((enrollment) => (
+      <tr key={enrollment.id} className="bg-white border-b hover:bg-gray-50">
+        <td className="px-6 py-3 text-sm font-medium text-gray-900">{enrollment.id}</td>
+        <td className="px-6 py-3 text-sm text-gray-900">{enrollment.student_id}</td>
+        <td className="px-6 py-3 text-sm text-gray-500">{enrollment.name}</td>
+        <td className="px-6 py-3 text-sm text-gray-500">{enrollment.email}</td>
+        <td className="px-6 py-3 text-sm text-gray-500">{enrollment.title}</td>
+
         <td className="px-6 py-3 text-sm text-center flex">
           <Button
             size="xs"
             color="blue"
-            onClick={() => handleEdit(student.id)}
+            onClick={() => handleEdit(enrollment.id)}
             className="mr-2"
           >
             Edit
@@ -69,7 +63,7 @@ export default function StudentsTable(props) {
           <Button
             size="xs"
             color="red"
-            onClick={() => handleDelete(student.id)}
+            onClick={() => handleDelete(enrollment.id)}
           >
             Delete
           </Button>
@@ -94,15 +88,17 @@ export default function StudentsTable(props) {
           </Toast>
         </div>
       )}
-
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full table-auto">
           <thead>
             <tr className="bg-gray-100">
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Student ID</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Student Name</th>
+              <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Student Email</th>
+              <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Course Title</th>
               <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+
             </tr>
           </thead>
           <tbody>{generateTableRows()}</tbody>

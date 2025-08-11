@@ -12,6 +12,17 @@ export const getCourses = async(req, res) =>{
     }
 }
 
+export const getCourseCount = async(req, res) =>{
+    try{
+        const result = await pool.query("SELECT COUNT(*) FROM courses")
+        return res.status(200).json({count: parseInt(result.rows[0].count)})
+    }
+    catch(err){
+        console.error(err)
+        return res.status(500).json({error: "Internal Server Error"})
+    }
+}
+
 export const getCourseById = async(req, res) =>{
     try{
         const id = parseInt(req.params.id)

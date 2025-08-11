@@ -11,8 +11,10 @@ import AdminRequired from './components/AdminRequired'
 import CourseManagement from './pages/admin/CourseManagement'
 import AddEditCourseForm from './pages/admin/CourseManagement/AddEditCourseForm'
 import StudentManagement from './pages/admin/StudentManagement'
-import StudentsTable from './pages/admin/StudentManagement/StudentsTable'
 import AddEditStudentForm from './pages/admin/StudentManagement/AddEditStudentForm'
+import EnrollmentManagemnnet from './pages/admin/EnrollmentManagement'
+import AddEditEnrollmentForm from './pages/admin/EnrollmentManagement/AddEditEnrollmentForm'
+import AdminDashboard from './pages/admin/AdminDashboard'
 
 function App() {
 
@@ -27,7 +29,7 @@ function App() {
           <Route path='signup' element={<Signup />} />
           <Route element={<AuthRequired />}>
             <Route path='admin' element={<AdminRequired />}>
-              <Route index element={<h1>Admin Dashboard</h1>} />
+              <Route index element={<AdminDashboard />} />
               <Route path='courses' element={<CourseManagement />}>
                 <Route index element={<AddEditCourseForm />} />
                 <Route path=':id' element={<AddEditCourseForm />} />
@@ -35,6 +37,10 @@ function App() {
               <Route path='students' element={<StudentManagement />}>
                 <Route index element={<AddEditStudentForm />} />
                 <Route path=':id' element={<AddEditStudentForm />} />      
+              </Route>
+              <Route path='enrollments' element={<EnrollmentManagemnnet />}>
+                <Route index element={<AddEditEnrollmentForm />} />
+                <Route path=':id' element={<AddEditEnrollmentForm />} />
               </Route>
             </Route>
             <Route path='student' element={<h1>Student Dashboard</h1>} />

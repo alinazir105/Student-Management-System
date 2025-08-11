@@ -10,11 +10,8 @@ export default function CourseTable(props) {
   const navigate = useNavigate();
 
   async function fetchCourses() {
-    const token = localStorage.getItem("token");
     try {
-      const res = await api.get("/api/admin/courses", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/api/admin/courses");
       console.log(res.data)
       setCoursesData(res.data);
     } catch (error) {
@@ -29,11 +26,8 @@ export default function CourseTable(props) {
   async function handleDelete(id) {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
 
-    const token = localStorage.getItem("token");
     try {
-      await api.delete(`/api/admin/courses/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/api/admin/courses/${id}`);
       setSuccess("Course deleted successfully");
       setCoursesData((prev) => prev.filter((course) => course.id !== id));
     } catch (error) {
