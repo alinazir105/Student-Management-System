@@ -31,7 +31,7 @@ export const getEnrollmentCount = async (req, res) => {
     }
 }
 
-export const getEnrolledStudentsCount = async(req, res) =>{
+export const getEnrolledStudentsCount = async (req, res) => {
     try {
         const result = await pool.query(
             `SELECT COUNT(DISTINCT e.student_id) AS count 
@@ -39,6 +39,22 @@ export const getEnrolledStudentsCount = async(req, res) =>{
         )
         return res.status(200).json({ count: parseInt(result.rows[0].count) })
     } catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: "Internal Server Error" })
+    }
+}
+
+export const getStudentsPerCourse = async (req, res) => {
+    try {
+        const result = await pool.query(`
+            select c.title, count(e.student_id) as "count" from courses c 
+            left join enrollments e on c.id = e.course_id
+            left join users s on e.student_id = s.id and s.role = 'student'
+            group by c.title;
+            `)
+        return res.status(200).json(result.rows)
+    }
+    catch (error) {
         console.error(error)
         return res.status(500).json({ error: "Internal Server Error" })
     }
@@ -130,7 +146,7 @@ export const updateEnrollment = async (req, res) => {
         if (updateResult.rowCount === 0) {
             return res.status(404).json({ error: "Invalid Enrollment Id" })
         }
-        
+
         const fullResult = await pool.query(
             `SELECT e.id, u.id AS student_id, u.name, u.email, c.title
              FROM users u

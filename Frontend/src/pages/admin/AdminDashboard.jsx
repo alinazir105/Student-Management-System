@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../../../axiosInstance";
 import { Card, Button } from "flowbite-react";
 import { HiUserGroup, HiBookOpen, HiClipboardList, HiUserAdd } from "react-icons/hi";
+import EnrollmentPieChart from "./EnrollmentPieChart";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -82,6 +83,9 @@ export default function AdminDashboard() {
         })}
       </div>
 
+      <div className="mx-auto w-[30%]">
+        <EnrollmentPieChart />
+      </div>
       {/* Quick Links */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Quick Links</h2>
