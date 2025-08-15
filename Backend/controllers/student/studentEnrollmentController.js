@@ -34,6 +34,15 @@ export const enrollCourse = async(req, res) =>{
             return res.status(400).json(error)
         }
 
+        const enrollmentLimitResult = await pool.query(
+            "SELECT COUNT(*) as enrollment_count FROM enrollments WHERE student_id = $1", [studentId]
+        )
+        const enrollmentCount = parseInt(enrollmentLimitResult.rows[0].enrollment_count);
+        
+        if(enrollmentCount >= 5){
+            return res.status(400).json({error: "You have reached the maximum enrollment limit of 5 courses."});
+        }
+
         const result = await pool.query(
             "INSERT INTO enrollments (student_id, course_id) VALUES ($1, $2) RETURNING *",
             [studentId, courseId]

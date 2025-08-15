@@ -3,6 +3,20 @@ import pool from "../../db/pool.js"
 export const getCourses = async(req, res) =>{
     try{
         const studentId = parseInt(req.user.id)
+        
+        const searchTerm = req.query.filter || '';
+        if(searchTerm){
+            const result = await pool.query(
+                `SELECT c.*, 
+                CASE WHEN e.student_id IS NULL THEN false ELSE true END AS enrolled 
+                FROM courses c
+                LEFT JOIN enrollments e ON c.id = e.course_id AND e.student_id = $1
+                WHERE c.title LIKE $2 OR c.description LIKE $2`,
+                [studentId, `%${searchTerm}%`]
+            )
+            return res.status(200).json(result.rows)
+        }
+
         const result = await pool.query(
             `SELECT c.*, 
             CASE WHEN e.student_id IS NULL THEN false ELSE true END AS enrolled 

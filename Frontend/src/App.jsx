@@ -15,6 +15,9 @@ import AddEditStudentForm from './pages/admin/StudentManagement/AddEditStudentFo
 import EnrollmentManagemnnet from './pages/admin/EnrollmentManagement'
 import AddEditEnrollmentForm from './pages/admin/EnrollmentManagement/AddEditEnrollmentForm'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import StudentRequired from './components/StudentRequired'
+import CourseList from './pages/student/CourseList'
+import ProfileManagement from './pages/student/ProfileManagement'
 
 function App() {
 
@@ -43,7 +46,11 @@ function App() {
                 <Route path=':id' element={<AddEditEnrollmentForm />} />
               </Route>
             </Route>
-            <Route path='student' element={<h1>Student Dashboard</h1>} />
+            <Route path='student' element={<StudentRequired />}>
+              <Route index element={<h1>Student Dashboard</h1>} />
+              <Route path='courses' element={<CourseList />} />
+              <Route path='profile' element={<ProfileManagement />} />
+            </Route>
           </Route>
           <Route path='*' element={<h1>Page not found</h1>} />
         </Route>
