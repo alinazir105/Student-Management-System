@@ -6,7 +6,7 @@ export const getEnrolledCourses = async(req, res) =>{
         const studentId = parseInt(req.user.id)
 
         const result = await pool.query(
-            `SELECT e.id,c.id, c.title, c.description FROM courses c
+            `SELECT e.id, c.id as course_id, c.title, c.description FROM courses c
             JOIN enrollments e ON c.id = e.course_id
             JOIN users u ON e.student_id = u.id
             WHERE u.id = $1`, [studentId])
@@ -22,6 +22,25 @@ export const getEnrolledCourses = async(req, res) =>{
         return res.status(500).json({error : "Internal Server Error"})
     }
 }
+
+export const getEnrollmentsCount = async (req, res) => {
+  try {
+    const studentId = parseInt(req.user.id)
+    const result = await pool.query(
+      "SELECT COUNT(*) as count FROM enrollments WHERE student_id = $1",
+      [studentId]
+    )
+
+    // Always respond using res.json
+    const count = result.rowCount === 0 ? 0 : parseInt(result.rows[0].count)
+    return res.status(200).json({ count })
+  }
+  catch(error){
+    console.error(error)
+    return res.status(500).json({error : "Internal Server Error"})
+  }
+}
+
 
 export const enrollCourse = async(req, res) =>{
     try{

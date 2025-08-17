@@ -1,7 +1,9 @@
 import express from 'express'
-import { enrollCourse, getEnrolledCourses, unenrollCourse } from '../../controllers/student/studentEnrollmentController.js'
+import { enrollCourse, getEnrolledCourses, getEnrollmentsCount, unenrollCourse } from '../../controllers/student/studentEnrollmentController.js'
 
 const studentEnrollmentRoutes = express.Router()
+
+studentEnrollmentRoutes.get('/count', getEnrollmentsCount)
 
 studentEnrollmentRoutes.get('/', getEnrolledCourses)
 

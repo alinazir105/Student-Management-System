@@ -18,6 +18,8 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import StudentRequired from './components/StudentRequired'
 import CourseList from './pages/student/CourseList'
 import ProfileManagement from './pages/student/ProfileManagement'
+import EnrolledCourses from './pages/student/EnrolledCourses'
+import StudentDashboard from './pages/student/StudentDashboard'
 
 function App() {
 
@@ -47,9 +49,10 @@ function App() {
               </Route>
             </Route>
             <Route path='student' element={<StudentRequired />}>
-              <Route index element={<h1>Student Dashboard</h1>} />
+              <Route index element={<StudentDashboard />} />
               <Route path='courses' element={<CourseList />} />
               <Route path='profile' element={<ProfileManagement />} />
+              <Route path='enrollments' element={<EnrolledCourses />} />
             </Route>
           </Route>
           <Route path='*' element={<h1>Page not found</h1>} />

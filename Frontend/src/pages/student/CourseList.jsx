@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../../axiosInstance';
 import { Button } from 'flowbite-react';
 import { useSearchParams } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 export default function CourseList() {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -88,6 +88,12 @@ export default function CourseList() {
 
     return (
         <div className="max-w-5xl mx-auto p-6 min-h-screen">
+            <Link
+                to="/student"
+                className="inline-block mb-4 text-blue-600 hover:text-blue-800 text-sm font-medium transition"
+            >
+                ← Back to Dashboard
+            </Link>
             <h1 className="text-xl font-semibold mb-6 text-gray-800">Available Courses</h1>
             <input
                 type="text"

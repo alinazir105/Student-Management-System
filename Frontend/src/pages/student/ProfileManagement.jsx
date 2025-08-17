@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../../../axiosInstance";
+import { Link } from "react-router-dom";
+import { Button } from "flowbite-react";
 
 export default function ProfileManagement() {
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -56,6 +58,12 @@ export default function ProfileManagement() {
 
     return (
         <section className="p-6 max-w-xl mx-auto min-h-screen">
+            <Link
+                to="/student"
+                className="inline-block mb-4 text-blue-600 hover:text-blue-800 text-sm font-medium transition"
+            >
+                ← Back to Dashboard
+            </Link>
             <h1 className="text-2xl font-semibold mb-6 text-gray-800">Profile Management</h1>
 
             {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
@@ -111,13 +119,13 @@ export default function ProfileManagement() {
                             {loading ? "Saving..." : "Save Changes"}
                         </button>
                     )}
-                    <button
+                    <Button
                         type="button"
                         onClick={() => setEdit(!edit)}
-                        className="text-blue-600 hover:underline text-sm"
+                        className="hover:underline text-sm cursor-pointer"
                     >
                         {edit ? "Cancel Edit" : "Edit Profile"}
-                    </button>
+                    </Button>
                 </div>
             </form>
         </section>
