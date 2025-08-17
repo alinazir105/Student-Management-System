@@ -4,6 +4,21 @@ import { validateEnrollment } from "../../utils/validateEnrollment.js"
 
 export const getEnrolledStudents = async (req, res) => {
     try {
+
+        const {filter} = req.query
+
+        if (filter) {
+            const result = await pool.query(
+                `SELECT e.id, u.id AS student_id, u.name, u.email, c.title 
+                 FROM users u 
+                 JOIN enrollments e ON u.id = e.student_id 
+                 JOIN courses c ON e.course_id = c.id 
+                 WHERE u.name ILIKE $1 OR u.email ILIKE $1 OR c.title ILIKE $1`,
+                [`%${filter}%`]
+            );
+            return res.status(200).json({data: result.rows});
+        }
+
         const result = await pool.query(
             `SELECT e.id, u.id AS student_id, u.name, u.email, c.title FROM users u 
             JOIN enrollments e ON u.id = e.student_id 

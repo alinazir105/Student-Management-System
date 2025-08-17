@@ -3,6 +3,13 @@ import { validateCourse } from "../../utils/validateCourse.js"
 //course management functions
 export const getCourses = async(req, res) =>{
     try{
+        const { filter } = req.query;
+        
+        if(filter){
+            const result = await pool.query("SELECT * FROM courses WHERE title ILIKE $1 ORDER BY id", [`%${filter}%`])
+            return res.status(200).json(result.rows)
+        }
+
         const result = await pool.query("SELECT * FROM courses ORDER BY id")
         return res.status(200).json(result.rows)
     }

@@ -1,17 +1,20 @@
 import { Button, Toast } from "flowbite-react";
 import { useState, useEffect } from "react";
 import api from "../../../../axiosInstance";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 export default function CourseTable(props) {
-  const {coursesData, setCoursesData} = props;
+  const { coursesData, setCoursesData } = props;
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchTerm = searchParams.get('filter') || ''
 
   async function fetchCourses() {
     try {
-      const res = await api.get("/api/admin/courses");
+      const res = await api.get(`/api/admin/courses?filter=${searchTerm}`);
       console.log(res.data)
       setCoursesData(res.data);
     } catch (error) {
@@ -21,7 +24,7 @@ export default function CourseTable(props) {
 
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [searchTerm]);
 
   async function handleDelete(id) {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
@@ -37,6 +40,10 @@ export default function CourseTable(props) {
 
   function handleEdit(id) {
     navigate(`/admin/courses/${id}`);
+  }
+
+  function handleChange(e) {
+    setSearchParams({ filter: e.target.value });
   }
 
   function generateTableRows() {
@@ -82,6 +89,22 @@ export default function CourseTable(props) {
           </Toast>
         </div>
       )}
+
+      <Link
+        to="/admin"
+        className="inline-block mb-4 text-blue-600 hover:text-blue-800 text-sm font-medium transition"
+      >
+        ← Back to Dashboard
+      </Link>
+      <h1 className="text-xl font-semibold mb-6 text-gray-800">Course Management</h1>
+
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleChange}
+        placeholder="Search courses..."
+        className="border rounded-md p-2 w-full mb-2"
+      />
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full table-auto">
           <thead>

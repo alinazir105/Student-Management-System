@@ -1,17 +1,20 @@
 import { Button, Toast } from "flowbite-react";
 import { useState, useEffect } from "react";
 import api from "../../../../axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 
 export default function EnrollmentsTable(props) {
-  const {enrollmentsData, setEnrollmentsData} = props;
+  const { enrollmentsData, setEnrollmentsData } = props;
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get('filter') || '';
 
   async function fetchEnrollments() {
     try {
-      const res = await api.get("/api/admin/enrollments");
+      const res = await api.get(`/api/admin/enrollments?filter=${searchTerm}`);
       console.log(res.data.data)
       setEnrollmentsData(res.data.data);
     } catch (error) {
@@ -21,7 +24,7 @@ export default function EnrollmentsTable(props) {
 
   useEffect(() => {
     fetchEnrollments();
-  }, []);
+  }, [searchTerm]);
 
   async function handleDelete(id) {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
@@ -40,6 +43,10 @@ export default function EnrollmentsTable(props) {
 
   function handleEdit(id) {
     navigate(`/admin/enrollments/${id}`);
+  }
+
+  function handleChange(e){
+    setSearchParams({ filter: e.target.value });
   }
 
   function generateTableRows() {
@@ -88,6 +95,22 @@ export default function EnrollmentsTable(props) {
           </Toast>
         </div>
       )}
+
+      <Link
+        to="/admin"
+        className="inline-block mb-4 text-blue-600 hover:text-blue-800 text-sm font-medium transition"
+      >
+        ← Back to Dashboard
+      </Link>
+      <h1 className="text-xl font-semibold mb-6 text-gray-800">Enrollment Management</h1>
+
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleChange}
+        placeholder="Search courses..."
+        className="border rounded-md p-2 w-full mb-2"
+      />
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full table-auto">
           <thead>

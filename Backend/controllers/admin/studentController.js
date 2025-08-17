@@ -7,6 +7,13 @@ import bcrypt from 'bcrypt'
 //student management functions
 export const getStudents = async(req, res) =>{
     try{
+        const {filter} = req.query
+
+        if(filter){
+            const result = await pool.query("SELECT * FROM users WHERE role = 'student' AND name ILIKE $1", [`%${filter}%`])
+            return res.status(200).json(result.rows)
+        }
+
         const result = await pool.query("SELECT * FROM users WHERE role = 'student'")
 
         return res.status(200).json(result.rows)
