@@ -23,33 +23,3 @@ CREATE TABLE enrollments (
   enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-select * from users;
-
--- Insert Admins
-INSERT INTO users (name, email, password, role)
-VALUES 
-  ('Admin One', 'admin1@example.com', 'hashed_password1', 'admin'),
-  ('Admin Two', 'admin2@example.com', 'hashed_password2', 'admin');
-
--- Insert Students
-INSERT INTO users (name, email, password, role)
-VALUES 
-  ('Student One', 'student1@example.com', 'hashed_password3', 'student'),
-  ('Student Two', 'student2@example.com', 'hashed_password4', 'student'),
-  ('Student Three', 'student3@example.com', 'hashed_password5', 'student');
-
--- Insert Courses
-INSERT INTO courses (title, description)
-VALUES 
-  ('Intro to Programming', 'Learn the basics of programming'),
-  ('Database Systems', 'Understand relational databases and SQL'),
-  ('Web Development', 'Build modern web apps with HTML, CSS, JS');
-
--- Insert Enrollments
-INSERT INTO enrollments (student_id, course_id)
-VALUES 
-  (3, 1),  -- Student One enrolled in Intro to Programming
-  (4, 2);  -- Student Two enrolled in Database Systems
-
-
-select * from courses;
