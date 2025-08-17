@@ -94,13 +94,13 @@ CREATE TABLE enrollments (
 
 ## 📂 Project Structure
 
-### Frontend (`/client`)
+### Frontend (`/Frontend`)
 
 * `/pages/admin` → Admin dashboards & CRUD screens.
 * `/pages/student` → Student dashboard, courses, profile, enrollments.
 * `/components` → Shared layout, protected route guards (`AuthRequired`, `AdminRequired`, `StudentRequired`).
 
-### Backend (`/server`)
+### Backend (`/Backend`)
 
 * `/routes` → API routes (auth, courses, students, enrollments).
 * `/controllers` → Business logic for routes.
